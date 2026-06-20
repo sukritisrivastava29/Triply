@@ -3,7 +3,7 @@ import SearchBar from "../SearchBar/SearchBar";
 function Hero() {
   return (
     <section
-     className="relative min-h-screen bg-cover bg-center flex items-center justify-center"
+     className="relative min-h-[700px] md:h-screen bg-cover bg-center flex items-center justify-center"
       style={{
         backgroundImage: `url(${heroImage})`,
       }}

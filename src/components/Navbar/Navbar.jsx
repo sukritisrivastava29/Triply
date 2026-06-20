@@ -80,14 +80,21 @@ function Navbar() {
               </Link>
             ))}
 
-            <button className="text-left font-medium text-slate-700">
-              Sign In
-            </button>
+           <Link
+  to="/login"
+  onClick={() => setMenuOpen(false)}
+  className="text-left font-medium text-slate-700 hover:text-orange-500"
+>
+  Sign In
+</Link>
 
-            <button className="bg-gradient-to-r from-orange-500 to-rose-500 text-white py-3 rounded-full">
-              Book Now
-            </button>
-          </div>
+<Link
+  to="/book"
+  onClick={() => setMenuOpen(false)}
+  className="bg-gradient-to-r from-orange-500 to-rose-500 text-white py-3 rounded-full text-center"
+>
+  Book Now
+</Link></div>
         </div>
       )}
     </nav>

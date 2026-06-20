@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { auth, provider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
 function Login() {
   const navigate = useNavigate();
 
@@ -18,6 +19,17 @@ function Login() {
     alert("Login Successful! (Frontend Demo)");
     navigate("/");
   };
+  const handleGoogleLogin = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+
+    console.log(result.user);
+
+    alert(`Welcome ${result.user.displayName}!`);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100 flex items-center justify-center px-6">
@@ -110,11 +122,18 @@ function Login() {
 
         </div>
 
-        <button
-          className="w-full border py-4 rounded-xl hover:bg-gray-50 transition font-medium"
-        >
-          Continue with Google
-        </button>
+      <button
+  onClick={handleGoogleLogin}
+  className="w-full border py-3 rounded-xl flex justify-center items-center gap-3 hover:bg-gray-50 transition"
+>
+  <img
+    src="https://www.svgrepo.com/show/475656/google-color.svg"
+    alt="Google"
+    className="w-6 h-6"
+  />
+
+  Continue with Google
+</button>
 
         <p className="text-center mt-8 text-slate-600">
 
