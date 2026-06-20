@@ -1,5 +1,6 @@
 import heroImage from "../../assets/trv2.avif";
 import SearchBar from "../SearchBar/SearchBar";
+import { Link } from "react-router-dom";
 function Hero() {
   return (
     <section
@@ -26,9 +27,12 @@ function Hero() {
           and create memories that last a lifetime.
         </p>
 
-        <button className="mt-10 bg-gradient-to-r from-orange-500 to-rose-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:scale-105 transition duration-300 shadow-xl">
-          Explore Now
-        </button>
+        <Link
+  to="/destinations"
+  className="inline-block mt-10 bg-gradient-to-r from-orange-500 to-rose-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:scale-105 transition duration-300 shadow-xl"
+>
+  Explore Now
+</Link>
       </div>
     </section>
   );
