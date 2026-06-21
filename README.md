@@ -1,16 +1,87 @@
-# React + Vite
+# Triply
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Triply is a modern travel planning web application that helps users discover destinations, explore travel packages, and generate personalized travel itineraries using AI. The application features a clean, responsive interface with secure user authentication and an intuitive user experience.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Personalized AI-generated travel itineraries
+- Destination exploration with detailed information
+- Travel package listings
+- Secure authentication with Firebase
+- Responsive design for desktop and mobile
+- Modern and intuitive user interface
+- Copy itinerary functionality
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
+- React.js
+- Vite
+- Tailwind CSS
+- React Router
 
-## Expanding the ESLint configuration
+### Backend & Services
+- Firebase Authentication
+- Google Gemini API
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Structure
+
+```
+src/
+├── components/
+├── pages/
+├── services/
+├── data/
+├── assets/
+└── App.jsx
+```
+
+## Getting Started
+
+### Clone the repository
+
+```bash
+git clone https://github.com/sukritisrivastava29/Triply.git
+```
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Configure environment variables
+
+Create a `.env` file in the project root.
+
+```env
+VITE_GEMINI_API_KEY=your_api_key
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+```
+
+### Start the development server
+
+```bash
+npm run dev
+```
+
+## Live Demo
+
+https://triply-fawn.vercel.app/
+
+## Future Improvements
+
+- Save generated itineraries
+- PDF export
+- Trip sharing
+- Weather integration
+- Interactive maps
+- Hotel and flight recommendations
+
+## Author
+
+**Sukriti Srivastava**
+
+GitHub: https://github.com/sukritisrivastava29
