@@ -5,13 +5,16 @@ import Footer from "../components/Footer/Footer";
 import { generateTrip } from "../services/gemini";
  import { useRef } from "react";
  import { Link } from "react-router-dom";
+ import { Copy, RotateCcw } from "lucide-react";
 
 function AIPlanner() {
   const [destination, setDestination] = useState("");
   const [days, setDays] = useState("");
   const [budget, setBudget] = useState("");
   const [style, setStyle] = useState("");
+  const [copied, setCopied] = useState(false);
   const resultRef = useRef(null);
+
 
   const [loading, setLoading] = useState(false);
   const [trip, setTrip] = useState("");
@@ -32,59 +35,58 @@ function AIPlanner() {
  
   
     try {
-   const prompt = `
+const prompt = `
 You are an expert travel planner.
 
-Create a professional travel itinerary.
+Create a travel itinerary.
 
 Destination: ${destination}
 Duration: ${days} days
 Budget: ${budget}
 Travel Style: ${style}
 
-Do NOT use markdown symbols like #, ##, *, or ---.
+The amount of detail should depend on the trip duration.
 
-Use clean section titles exactly like this:
+Rules:
+- 1 day: Keep the itinerary under 150 words.
+- 2-3 days: Keep it under 250 words.
+- 4-7 days: Keep it under 450 words.
+- More than 7 days: Keep it under 700 words.
 
-🌍 Trip Overview
-
-💰 Estimated Budget
-
-☀️ Best Time to Visit
-
-📅 Day 1
-
+For each day include:
 Morning:
 Afternoon:
 Evening:
 
-📅 Day 2
+Use only one activity for each time slot.
 
-Morning:
-Afternoon:
-Evening:
+Also include:
+- 🌍 Trip Overview (2 sentences)
+- 💰 Estimated Budget (1 sentence)
+- ☀️ Best Time to Visit (1 sentence)
+- 🍽️ Must-Try Foods (3 items)
+- 🎒 Packing List (5 items)
+- 💡 Travel Tips (3 tips)
 
-Continue until Day ${days}.
-
-🍽️ Food to Try
-
-🎒 Packing List
-
-💡 Travel Tips
-
-Keep the itinerary realistic, detailed, and visually clean.
-`;
-      const response = await generateTrip(prompt);
+Return the response in Markdown using ## headings.
+Do not write long paragraphs.
+Keep activities short and easy to scan.
+`;  const response = await generateTrip(prompt);
       setTrip(response);
       setTimeout(() => {
   resultRef.current?.scrollIntoView({
     behavior: "smooth",
   });
 }, 100);
-    } catch (err) {
-      console.error(err);
-      setTrip("❌ Unable to generate your itinerary.");
-    }
+    }catch (error) {
+  console.error(error);
+
+  if (error.message.includes("429")) {
+    return "⚠️ AI service is temporarily busy. Please try again in a few seconds.";
+  }
+
+  return "❌ Failed to generate itinerary.";
+}
 
     setLoading(false);
   };
@@ -188,49 +190,81 @@ Keep the itinerary realistic, detailed, and visually clean.
 
           </div>
 
-          {trip && (
-            <div
-            ref={resultRef}
-           className="mt-12 bg-white rounded-3xl shadow-xl border border-orange-100 p-10">
+         {trip && (
+  <div
+    ref={resultRef}
+    className="mt-12 bg-white rounded-3xl shadow-xl border border-orange-100 p-6 md:p-10"
+  >
+    {/* Header */}
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
-              <div className="flex justify-between items-center mb-8">
+      {/* Title */}
+      <div className="flex-1">
+        <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
+          ✈️ Your Personalized Itinerary
+        </h2>
 
-                <h2 className="text-3xl font-bold text-orange-500">
-                  🌍 Your AI Travel Plan
-                </h2>
+        <p className="mt-2 text-sm md:text-base text-slate-500">
+          Crafted by AI based on your destination, budget and travel style.
+        </p>
+      </div>
 
-                <p className="text-slate-500 mt-2">
-Personalized itinerary generated with AI
-</p>
+      {/* Buttons */}
+      <div className="flex w-full md:w-auto gap-3">
 
-                <div className="flex gap-3">
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(trip);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+          }}
+          className="flex-1 md:flex-none flex items-center justify-center gap-2 border border-slate-200 bg-white px-4 py-2 rounded-lg text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 hover:shadow-md transition-all duration-200"
+        >
+          <Copy size={16} />
+          {copied ? "Copied!" : "Copy"}
+        </button>
 
- <button
-      onClick={() => navigator.clipboard.writeText(trip)}
-      className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-xl transition"
+        <button
+          onClick={() => {
+            setTrip("");
+            setDestination("");
+            setDays("");
+            setBudget("");
+            setStyle("");
+            setCopied(false);
+          }}
+          className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-rose-500 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+        >
+          <RotateCcw size={16} />
+          New Trip
+        </button>
+
+      </div>
+    </div>
+
+    <hr className="my-6 border-orange-100" />
+
+    {/* Itinerary */}
+    <article
+      className="
+        prose
+        prose-lg
+        max-w-none
+        leading-8
+        prose-headings:text-orange-600
+        prose-headings:font-bold
+        prose-h2:text-2xl
+        prose-h3:text-xl
+        prose-strong:text-slate-800
+        prose-p:text-slate-700
+        prose-li:text-slate-700
+        prose-li:marker:text-orange-500
+      "
     >
-      📋 Copy
-    </button>
-
-    <button
-      onClick={() => setTrip("")}
-      className="border border-orange-500 text-orange-500 hover:bg-orange-50 px-5 py-2 rounded-xl transition"
-    >
-      🔄 Generate Again
-    </button>
-
+      <ReactMarkdown>{trip}</ReactMarkdown>
+    </article>
   </div>
-
-</div>
-
-<hr className="my-6 border-orange-100" />
-              <article className="prose prose-lg max-w-none leading-8 prose-headings:text-orange-600 prose-strong:text-slate-800 prose-p:text-slate-700 prose-li:text-slate-700">
-                <ReactMarkdown>{trip}</ReactMarkdown>
-              </article>
-
-            </div>
-          )}
-
+)}
         </div>
 
       </div>
