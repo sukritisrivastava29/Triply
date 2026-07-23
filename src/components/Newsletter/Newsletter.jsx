@@ -1,8 +1,29 @@
- function Newsletter() {
+import { useState } from "react";
+
+function Newsletter() {
+  const [email, setEmail] = useState("");
+
+  const handleSubscribe = () => {
+    if (email.trim() === "") {
+      alert("Please enter your email.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    alert(`🎉 Thank you for subscribing, ${email}!`);
+
+    setEmail("");
+  };
+
   return (
     <section className="py-24 bg-gradient-to-r from-orange-500 to-rose-500">
       <div className="max-w-4xl mx-auto text-center px-6">
-
         <h2 className="text-5xl font-bold text-white">
           Stay Informed
         </h2>
@@ -13,19 +34,21 @@
         </p>
 
         <div className="mt-10 flex flex-col md:flex-row gap-4 justify-center">
-
           <input
             type="email"
             placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="px-6 py-4 rounded-full w-full md:w-96 outline-none text-slate-800"
           />
 
-          <button className="bg-slate-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-slate-800 transition">
+          <button
+            onClick={handleSubscribe}
+            className="bg-slate-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-slate-800 transition"
+          >
             Subscribe
           </button>
-
         </div>
-
       </div>
     </section>
   );
