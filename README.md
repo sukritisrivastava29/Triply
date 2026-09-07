@@ -1,6 +1,6 @@
 # Triply
 
-Triply is a modern travel planning web application that helps users discover destinations, explore travel packages, and generate personalized travel itineraries using AI. The application features a clean, responsive interface with secure user authentication and an intuitive user experience.
+Triply is a modern travel planning web application that helps users discover destinations, explore travel packages and generate personalized travel itineraries using AI. The application features a clean, responsive interface with secure user authentication and an intuitive user experience.
 
 ## Features
 
