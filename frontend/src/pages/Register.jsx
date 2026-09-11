@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { registerUser } from "../services/api";
 function Register() {
     const navigate = useNavigate();
 
@@ -20,60 +20,44 @@ function Register() {
             [e.target.name]: e.target.value,
         });
     };
+const handleRegister = async (e) => {
+    e.preventDefault();
 
-    const handleRegister = async (e) => {
-        e.preventDefault();
+    const { name, email, password, confirmPassword } = formData;
 
-        const { name, email, password, confirmPassword } = formData;
+    if (!name || !email || !password || !confirmPassword) {
+        setError("Please fill all the fields.");
+        return;
+    }
 
-        if (!name || !email || !password || !confirmPassword) {
-            setError("Please fill all the fields.");
-            return;
-        }
+    if (password !== confirmPassword) {
+        setError("Passwords do not match.");
+        return;
+    }
 
-        if (password !== confirmPassword) {
-            setError("Passwords do not match.");
-            return;
-        }
+    if (password.length < 6) {
+        setError("Password must be at least 6 characters.");
+        return;
+    }
 
-        if (password.length < 6) {
-            setError("Password must be at least 6 characters.");
-            return;
-        }
+    try {
+        setLoading(true);
+        setError("");
 
-        try {
-            setLoading(true);
-            setError("");
+        await registerUser({
+            name,
+            email,
+            password,
+        });
 
-            const response = await fetch(
-                "http://localhost:5000/api/auth/register",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        password,
-                    }),
-                }
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || "Registration failed");
-            }
-
-            alert("Account created successfully!");
-            navigate("/login");
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+        alert("Account created successfully!");
+        navigate("/login");
+    } catch (error) {
+        setError(error.message);
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100 flex items-center justify-center px-6">

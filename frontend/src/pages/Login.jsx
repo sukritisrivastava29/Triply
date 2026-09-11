@@ -1,24 +1,39 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { loginUser } from "../services/api";
 function Login() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+ const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
-      alert("Please fill all the fields.");
-      return;
+        setError("Please fill all the fields.");
+        return;
     }
 
-    alert("Login Successful! (Frontend Demo)");
-    navigate("/");
-  };
+    try {
+        setLoading(true);
+        setError("");
 
+        const data = await loginUser({
+            email,
+            password,
+        });
+
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        navigate("/");
+    } catch (error) {
+        setError(error.message);
+    } finally {
+        setLoading(false);
+    }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100 flex items-center justify-center px-6">
